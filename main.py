@@ -23,7 +23,7 @@ data_augmentation = tf.keras.Sequential([
     tf.keras.layers.RandomTranslation(0.1, 0.1)
 ])
 
-# Enhance the model with CNN layers
+# The model with CNN layers
 model = tf.keras.models.Sequential([
     tf.keras.layers.Reshape((28, 28, 1), input_shape=(28, 28)),
     tf.keras.layers.Conv2D(32, (3, 3), activation='relu'),
