@@ -24,28 +24,42 @@ data_augmentation = tf.keras.Sequential([
 ])
 
 # The model with CNN layers
-model = tf.keras.models.Sequential([
-    tf.keras.layers.Reshape((28, 28, 1), input_shape=(28, 28)),
-    tf.keras.layers.Conv2D(32, (3, 3), activation='relu'),
-    tf.keras.layers.MaxPooling2D((2, 2)),
-    tf.keras.layers.Conv2D(64, (3, 3), activation='relu'),
-    tf.keras.layers.MaxPooling2D((2, 2)),
-    tf.keras.layers.Flatten(),
-    tf.keras.layers.Dropout(0.5),
-    tf.keras.layers.Dense(128, activation='relu'),
-    tf.keras.layers.Dense(10, activation='softmax')
-])
+def create_model():
+    model = tf.keras.models.Sequential([
+        tf.keras.layers.Reshape((28, 28, 1), input_shape=(28, 28)),
+        tf.keras.layers.Conv2D(32, (3, 3), activation='relu'),
+        tf.keras.layers.MaxPooling2D((2, 2)),
+        tf.keras.layers.Conv2D(64, (3, 3), activation='relu'),
+        tf.keras.layers.MaxPooling2D((2, 2)),
+        tf.keras.layers.Flatten(),
+        tf.keras.layers.Dropout(0.5),
+        tf.keras.layers.Dense(128, activation='relu'),
+        tf.keras.layers.Dense(10, activation='softmax')
+    ])
+    return model
 
-# Compile the model
-model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
-              loss='sparse_categorical_crossentropy',
-              metrics=['accuracy'])
+# Check if a saved model exists
+import os
+model_path = 'mnist_cnn_model.h5'
+if os.path.exists(model_path):
+    print("Loading saved model...")
+    model = tf.keras.models.load_model(model_path)
+else:
+    print("No saved model found. Creating a new model...")
+    model = create_model()
+    # Compile the model
+    model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
+                  loss='sparse_categorical_crossentropy',
+                  metrics=['accuracy'])
+    # Train the model with augmented data
+    train_dataset = tf.data.Dataset.from_tensor_slices((x_train, y_train))
+    train_dataset = train_dataset.shuffle(buffer_size=1024).batch(32).map(lambda x, y: (data_augmentation(x), y))
 
-# Train the model with augmented data
-train_dataset = tf.data.Dataset.from_tensor_slices((x_train, y_train))
-train_dataset = train_dataset.shuffle(buffer_size=1024).batch(32).map(lambda x, y: (data_augmentation(x), y))
+    model.fit(train_dataset, epochs=10, validation_data=(x_test, y_test))
 
-model.fit(train_dataset, epochs=10, validation_data=(x_test, y_test))
+    # Save the trained model
+    model.save(model_path)
+    print(f"Model saved to {model_path}")
 
 # Evaluate the model
 loss, accuracy = model.evaluate(x_test, y_test)
