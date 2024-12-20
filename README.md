@@ -1,4 +1,4 @@
-# MNIST Handwritten Digit Recognition with CNN
+# Digit Recognition with CNN
 
 This project demonstrates a real-time handwritten digit recognition system using a Convolutional Neural Network (CNN). Users can draw digits on a virtual canvas, and the trained model predicts the drawn digit with high accuracy.
 
