@@ -10,6 +10,7 @@ This project demonstrates a real-time handwritten digit recognition system using
 - **Convolutional Neural Network (CNN)**: Utilizes a deep learning model trained on the MNIST dataset for handwritten digit recognition.
 - **Data Augmentation**: Incorporates random rotations, zooms, and translations to improve model generalization.
 - **Interactive GUI**: Built using `Tkinter` to allow users to interact with the application easily.
+- **Model Saving and Loading**: Automatically saves the trained model and loads it for future use, avoiding the need for retraining.
 
 ---
 
@@ -51,12 +52,29 @@ pip install -r requirements.txt
 - **Fully Connected Layers**:
   - Dense layer with 128 neurons and ReLU activation.
   - Output layer with 10 neurons (softmax activation) for classification.
+
+## **Model Saving and Loading**
+- **Saving**: The trained model is automatically saved as `mnist_cnn_model.h5` in the project directory after training.  
+- **Loading**: On subsequent runs, the program checks for the saved model:
+  - If the saved model exists, it is loaded for predictions.
+  - If not, a new model is trained and saved.
+
 ## Directory Structure
 mnist-digit-recognition/  
 │   
 ├── mnist_digit_recognition.py   # Main script for training and prediction   
 ├── requirements.txt             # List of dependencies   
 ├── README.md                    # Project documentation   
-└── screenshots/                 # Folder to store screenshots   
+   
+## **Future Improvements**
+- Add a pre-trained model to reduce training time further.  
+- Enhance the GUI with more user-friendly features.  
+- Experiment with different CNN architectures for better accuracy.  
+- Add support for saving user-drawn digits and predictions for analysis.  
 
+## **Contributing**  
+Contributions are welcome! Feel free to fork the repository and create a pull request.  
+
+## **License**  
+This project is licensed under the MIT License.  
 
